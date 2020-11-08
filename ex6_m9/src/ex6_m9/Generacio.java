@@ -24,6 +24,8 @@ public class Generacio {
 
     public static void main(String[] args){
         Scanner sc = new Scanner(System.in);
+        
+        //las variables
         int numero = 512;
         
         KeyPair keys;
@@ -33,6 +35,7 @@ public class Generacio {
        
         // private
         
+        //esto para crear la clau privada
         Base64.Encoder encoder = Base64.getEncoder();
         try (FileWriter out = new FileWriter("clauPRIVADA")) {
         out.write("—-BEGIN RSA PRIVATE KEY—-");
@@ -49,7 +52,7 @@ public class Generacio {
            System.out.println("No se ha guardado la llave privada"); 
         }
         
-        //public
+        //para crear la clau publica
         try (FileWriter out = new FileWriter("clauPublica")) {
         out.write("—-BEGIN RSA PUBLIC KEY—-");
         out.write("\n");

@@ -24,38 +24,41 @@ public class Desencriptacio {
     public static void main(String[] args) 
             throws InvalidKeySpecException, NoSuchAlgorithmException, 
             IOException, NoSuchProviderException{
-        
+        //variables
         SecretKey sKey;
         
         String resultado;
         
+        //bytes
         byte[] arrayPrivada, missatgeencrip , clauencrip , arraydecrypkey, 
                 arraydecryp;
         arrayPrivada = Files.readAllBytes(Paths.get("clauPRIVADA"));
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-
+// esto para quitar el begin y el end poner nada
     String privateKeyContent = new String(arrayPrivada);
     privateKeyContent = privateKeyContent
         .replace("—-BEGIN RSA PRIVATE KEY—-", "")
         .replace("—-END RSA PRIVATE KEY—-", "")
         .replace("\n", "");
-
+// el encoded
     byte[] privateKeyDecoded = Base64.getDecoder()
         .decode(privateKeyContent);
 
     PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(privateKeyDecoded);
     PrivateKey privateKey = keyFactory.generatePrivate(privateKeySpec);
     
+    //esto para importar los ficheros  de clau encriptada y el missatge encriptat
     clauencrip = Files.readAllBytes(Paths.get("ZZZ_clau_encriptada"));
     missatgeencrip = Files.readAllBytes(Paths.get("ZZZ_missatge_encriptat"));
     
+    // esto es para extraer la frase y descifrarla 
     arraydecrypkey = decryptKey (clauencrip , privateKey);
     sKey = new SecretKeySpec(arraydecrypkey, 0, arraydecrypkey.length , "AES");
     
     arraydecryp = decryptData(sKey, missatgeencrip);
     
     resultado = new String (arraydecryp);
-    
+     // y aqui la muestra la frase desencriptada
     System.out.println("La frase desencriptada es : " + resultado);
     
    

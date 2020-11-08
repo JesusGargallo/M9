@@ -28,7 +28,7 @@ import static sun.security.krb5.internal.ktab.KeyTabConstants.keySize;
 public class Encriptacio {
     public static void main(String[] args) throws NoSuchAlgorithmException, 
             InvalidKeySpecException, IOException, NoSuchProviderException {
-        
+        //variables
         Scanner sc = new Scanner(System.in);
         String publica;
         String texto;
@@ -39,11 +39,13 @@ public class Encriptacio {
 				
         byte[] arraysKey = sKey.getEncoded();
         
+        //para poner el nombre de tu clave publica
         System.out.println("Nombre del archivo de la clave publica: ");
         publica = sc.nextLine();
         arraypublica = Files.readAllBytes(Paths.get(publica));
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-
+        
+        // esto para quitar el begin y el end poner nada
         String publicKeyContent = new String(arraypublica);
         publicKeyContent = publicKeyContent
                 .replace("—-BEGIN RSA PUBLIC KEY—-", "")
@@ -58,11 +60,13 @@ public class Encriptacio {
         PublicKey publicKey;
         publicKey = keyFactory.generatePublic(publicKeySpec);
         
+        
+        //para encriptar la frase que pongas
         System.out.println("Que frase quieres encriptar: ");
         texto = sc.nextLine();
         
         
-        
+        //los bytes
         byte[] arraytexto;
         arraytexto = texto.getBytes();
         byte[] arrayencrip;
@@ -71,7 +75,8 @@ public class Encriptacio {
         
         byte[] clavesimetricaencrip;
         clavesimetricaencrip = encryptKey(arraysKey,publicKey);
-                
+        
+        //es para guardas la frase en esos ficheros
         try{
             BufferedOutputStream bos = new BufferedOutputStream
             (new FileOutputStream("ZZZ_clau_encriptada"));
@@ -91,7 +96,7 @@ public class Encriptacio {
         }
     }
     
-    
+//los public statics
 public static SecretKey generadordellaves() throws NoSuchAlgorithmException{
         SecretKey sKey = null;
         int kSize = 256;
@@ -104,7 +109,7 @@ public static SecretKey generadordellaves() throws NoSuchAlgorithmException{
         }
         return sKey;
     }
-    
+//los public statics    
 public static byte[] encryptData(SecretKey sKey, byte[] data) {
     byte[] encryptedData = null;
     try {
@@ -117,7 +122,7 @@ public static byte[] encryptData(SecretKey sKey, byte[] data) {
     }
     return encryptedData;
 }
-
+//los public statics
 public static byte[] encryptKey(byte[] array, PublicKey pub) throws NoSuchProviderException {
     byte[] encryptedData = null;
     try {

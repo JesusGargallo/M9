@@ -1,10 +1,14 @@
-package Dam.M9.UF1.Activitat7;
+package ex7_m9;
+
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import static java.lang.System.out;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -22,13 +26,22 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class Signatura {
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws IOException{
         Scanner sc = new Scanner(System.in);
         
         //las variables
         int numero = 512;
+        String missatge;
         
-        System.out.println("Hola");
+        
+        byte[] arraymissatge;
+        
+        System.out.println("Generant claus publiques i provades "
+                + "(arxius clauPublica i clauPrivada)...OK");
+        
+        System.out.println("Introduce el mensaje a signar: ");
+        missatge = sc.nextLine();
+        arraymissatge = missatge.getBytes();
         
         KeyPair keys;
         keys = randomGenerate(numero);
@@ -72,6 +85,25 @@ public class Signatura {
             System.out.println("No se ha guardado la llave publica");
         }
         
+        try (FileOutputStream fos = new FileOutputStream("missatge")) {
+
+        fos.write(arraymissatge);
+        fos.close();
+        
+        } catch (IOException ex) {
+           System.out.println("No se ha guardado el mensaje"); 
+        }
+        
+        try (FileOutputStream fos = new FileOutputStream("firma_missatge")) {
+
+        fos.write(arraymissatge);
+        fos.close();
+        
+        } catch (IOException ex) {
+           System.out.println("No se ha guardado el mensaje"); 
+        }
+        
+        
     }
     
     public static KeyPair randomGenerate(int longuitudClau) {
@@ -89,4 +121,5 @@ public class Signatura {
     
     
 }
+
 

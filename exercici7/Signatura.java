@@ -15,6 +15,7 @@ import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.Signature;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
@@ -35,6 +36,7 @@ public class Signatura {
         
         
         byte[] arraymissatge;
+        byte[] arrayfirma;
         
         System.out.println("Generant claus publiques i provades "
                 + "(arxius clauPublica i clauPrivada)...OK");
@@ -85,6 +87,7 @@ public class Signatura {
             System.out.println("No se ha guardado la llave publica");
         }
         
+        //crear misastge 
         try (FileOutputStream fos = new FileOutputStream("missatge")) {
 
         fos.write(arraymissatge);
@@ -94,9 +97,10 @@ public class Signatura {
            System.out.println("No se ha guardado el mensaje"); 
         }
         
-        try (FileOutputStream fos = new FileOutputStream("firma_missatge")) {
-
-        fos.write(arraymissatge);
+        // crear la firma
+        try (FileOutputStream fos = new FileOutputStream("firma")) {
+        arrayfirma = signData(arraymissatge, privatekey);
+        fos.write(arrayfirma);
         fos.close();
         
         } catch (IOException ex) {
@@ -119,6 +123,22 @@ public class Signatura {
         return keys;
     }
     
+    public static byte[] signData(byte[] missatgeBytes, PrivateKey clauPrivadaText) {
+        byte[] signature = null;
+        try {
+            Signature signer = Signature.getInstance("SHA1withRSA");
+            signer.initSign(clauPrivadaText);
+            signer.update(missatgeBytes);
+            signature = signer.sign();
+            System.out.println("Signant el missatge...OK");
+            System.out.println("Generant arxiu firma_missatge...OK");
+            System.out.println("Generant arxiu missatge...OK");
+        }catch (Exception ex) {
+            System.err.println("Error signant les dades: " + ex);
+        }
+        return signature;
+        
+    }
     
 }
 
